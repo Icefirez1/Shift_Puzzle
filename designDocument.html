@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design Document</title>
+</head>
+<body>
+    <h1>Sixteen Puzzle</h1>
+    <h2>Classes</h2>
+    <ul>
+        <li>
+            Permutation.java
+            <ul>
+                <li>Generates and stores a random permutation on n items</li>
+                <li><code>isEven()</code> - returns if the permutation is even or not</li>
+                <li>
+                    <code> applyToList(List&lt;T&gt; someList), applyToArray(T[] someArray),
+                    applyTo2DArray(T[][] some2DArray)</code> - applies the permutation stored
+                    in the object to the input
+                </li>
+            </ul>
+        </li>
+        <li>
+            Tile.java
+            <ul>
+                <li>Extends <code>javafx.scene.control.Button</code></li>
+                <li>Stores the value and position of the <code>Tile</code></li>
+                <li>Listens for clicks and calls a <code>Board</code>'s <code>swap(Tile t)</code> function</li>
+                <li><code>getValue()</code> - returns the value stored in the tile</li>
+            </ul>
+        </li>
+        <li>
+            Board.java
+            <ul>
+                <li>Extends <code>javafx.scene.layout.GridPane</code></li>
+                <li>Stores an array of 16 <code>Tile</code>s, one of which is null</li>
+                <li><code>swap(Tile t)</code> - swaps <code>t</code> with the null tile if the move is valid</li>
+            </ul>
+        </li>
+        <li>
+            App.java
+            <ul>
+                <li>Top object</li>
+                <li><code>startGame()</code> - starts the game, handling all setup</li>
+            </ul>
+        </li>
+    </ul>
+</body>
+</html>
