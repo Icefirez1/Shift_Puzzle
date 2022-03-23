@@ -12,11 +12,11 @@ import javafx.geometry.Pos;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
 
-public class app extends Application
+public class App extends Application
 {
     private GridPane grid;
 
-    public app()
+    public App()
     {
         grid = new GridPane(); 
     }

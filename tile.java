@@ -1,9 +1,12 @@
-public class tile
+public class Tile
 {
-    private int num;
-    public tile(int num)
+    private Integer num;
+    public Tile(Integer num)
     {
         this.num = num; 
     }
-    
+    public int value()
+    {
+        return num; 
+    }
 }
