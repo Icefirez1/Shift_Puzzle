@@ -34,4 +34,8 @@ public class Tile
     {
         return num; 
     }
+    public void setValue(Integer new_num)
+    {
+        num = new_num; 
+    }
 }

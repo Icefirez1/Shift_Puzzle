@@ -27,11 +27,33 @@ public class Board //extends GridPane
     {
         tiles.add(obj);
     }
-
-    public void swap(Tile swap_obj)
+    private void swap(int j, int k)
+    {
+        Tile tmp = tiles.get(j);
+        tiles.set(j, tiles.get(k));
+        tiles.set(k, tmp);
+    } 
+    public void swapTile(Tile swap_obj)
     {
         /*I think we should call this method everytime the button gets clicked*/
-        
+        int pos = tiles.indexOf(swap_obj);
+        if(pos + 1 < 16 && tiles.get(pos).value() == -1)
+        {
+            swap(pos, pos + 1);
+        }
+        else if(pos - 1  > 0 && tiles.get(pos).value() == -1)
+        {
+            swap(pos, pos + 1);
+        }
+        else if(pos + 4 < 16 && tiles.get(pos).value() == -1)
+        {
+            swap(pos, pos + 1);
+        }
+        else if(pos - 1 < 0 && tiles.get(pos).value() == -1)
+        {
+            swap(pos, pos + 1);
+        }
+        // i still havent accounted for like those weird cases but I no longer have any motivation
 
         
     }
