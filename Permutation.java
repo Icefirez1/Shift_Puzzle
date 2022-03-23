@@ -37,7 +37,7 @@ public class Permutation {
             indices[i] = rand.nextInt(n);
         }
 
-        return new Permutation(indices);
+        return new Permutation(n, indices);
     }
 
     /**
@@ -74,14 +74,14 @@ public class Permutation {
     // indices is an even length array of ints
     // Each pair of ints reperesents a swap
     // Ex. {3, 4, 5, 6} represents swapping 3 and 4, then 5 and 6
-    private Permutation(int[] indices) {
+    private Permutation(int n, int[] indices) {
         // Make sure indicies is even
         if (indices.length % 2 != 0) {
             throw new IllegalArgumentException("indices must have an even length");
         }
         
         this.indices = indices;
-        this.numObjects = indices.length/2;
+        this.numObjects = n;
         this.isEven = (numObjects % 2) == 0;
     }
 
