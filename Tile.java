@@ -1,6 +1,4 @@
-import javafx.scene.control.Button;
-
-public class Tile extends Button
+public class Tile
 {
     private Integer num;
     private int x;
