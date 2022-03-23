@@ -4,6 +4,11 @@ import javafx.scene.layout.GridPane;
 public class Board //extends GridPane
 {
     private ArrayList<ArrayList<Tile>> tiles; 
+    private ArrayList<Tile> tiles;
+
+    /**
+     * Create an empty Board with no Tiles
+     */
     public Board()
     {
         this.tiles = new ArrayList<>(); 
@@ -20,6 +25,16 @@ public class Board //extends GridPane
             tiles.add(current); 
         }
         tiles.get(3).add(new Tile(-1));
+    }
+
+    /**
+     * Add the Tile obj to this Board
+     * @param obj the Tile to be added to the Board
+     */
+    public void add(Tile obj)
+    {
+        tiles.add(obj);
+    }
 
     }
     // public void add(Tile obj)
