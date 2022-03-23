@@ -1,4 +1,6 @@
-public class Tile
+import javafx.scene.control.Button;
+
+public class Tile //extends Button
 {
     private Integer num;
     public Tile(Integer num)
@@ -8,5 +10,15 @@ public class Tile
     public int value()
     {
         return num; 
+    }
+    public String toString()
+    {
+        return "" + num; 
+
+    }
+
+    public static void main(String[] args)
+        {
+
     }
 }
