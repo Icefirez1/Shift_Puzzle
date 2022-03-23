@@ -1,5 +1,3 @@
-// TODO: test with zeros as inputs (ex. as n or as numSwaps)
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -203,13 +201,5 @@ public class Permutation
         T temp = array[iy][ix];
         array[iy][ix] = array[jy][jx];
         array[jy][jx] = temp;
-    }
-
-    public static void main(String[] args) {
-        Permutation p = Permutation.randomPermutation(10, 3);
-        System.out.println(Arrays.toString(p.indices));
-
-        Permutation q = Permutation.randomPermutation(10, 2, 6);
-        System.out.println(Arrays.toString(q.indices));
     }
 }
