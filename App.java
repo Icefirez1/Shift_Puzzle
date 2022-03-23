@@ -34,13 +34,21 @@ public class App extends Application
 
         bp.setCenter(grid);
 
-
-        primary.setScene(new Scene(bp, 694.20, 694.20));
-        primary.show(); 
+        Scene s = new Scene(bp, 694.20, 694.20);
+        // Load stylesheet from external file
+        // https://stackoverflow.com/a/22755350
+        s.getStylesheets().add(getClass().getResource("main.css").toExternalForm());
+        
+        primary.setScene(s);
+        primary.show();
     }
     @Override
     public void stop()
     {
         
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 }

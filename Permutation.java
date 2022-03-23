@@ -89,7 +89,7 @@ public class Permutation
         
         this.indices = indices;
         this.numObjects = n;
-        this.isEven = (numObjects % 2) == 0;
+        this.isEven = (indices.length % 4) == 0;
     }
 
     /**
