@@ -3,8 +3,7 @@ import javafx.scene.layout.GridPane;
 
 public class Board //extends GridPane
 {
-    private ArrayList<ArrayList<Tile>> tiles; 
-    private ArrayList<Tile> tiles;
+    private ArrayList<Tile> tiles; 
 
     /**
      * Create an empty Board with no Tiles
@@ -13,18 +12,11 @@ public class Board //extends GridPane
     {
         this.tiles = new ArrayList<>(); 
 
-        Integer num = 1; 
-        for(int i = 0; i < 4; i++)
+        tiles.add(new Tile(-1));
+        for(int i = 1; i < 16; i++)
         {
-            ArrayList<Tile> current = new ArrayList<>(); 
-            for (int j = 0; j < 4; j++)
-            {
-                current.add(new Tile(num));
-                num ++; 
-            }
-            tiles.add(current); 
+           tiles.add(new Tile(i));
         }
-        tiles.get(3).add(new Tile(-1));
     }
 
     /**
@@ -36,33 +28,12 @@ public class Board //extends GridPane
         tiles.add(obj);
     }
 
-    }
-    // public void add(Tile obj)
-    // {
-    //     tiles.add(obj);
-    // }
-
     public void swap(Tile swap_obj)
     {
         /*I think we should call this method everytime the button gets clicked*/
+        
 
         
-    }
-    private String AString(ArrayList<Tile> array)
-    {
-        StringBuffer sb = new StringBuffer();
-        if (array.size() == 0)
-        {
-            return "[]";
-        }
-        sb.append("[");
-        for(int k = 0; k < array.size() - 1; k++)
-        {
-            sb.append(String.format("%s, ", tiles.get(k)));  
-            
-        }
-        sb.append(String.format("%s]",tiles.get(tiles.size() - 1)));
-        return sb.toString();
     }
     public String toString()
     {
@@ -74,10 +45,10 @@ public class Board //extends GridPane
         sb.append("[");
         for(int k = 0; k < tiles.size() - 1; k++)
         {
-            sb.append(String.format("%s, ", AString(tiles.get(k))));  
-            
+            sb.append(String.format("%s, ", tiles.get(k).value()));  
+
         }
-        sb.append(String.format("]"));
+        sb.append(String.format("%s]",tiles.get(tiles.size() - 1).value()));
         return sb.toString();
     }
     
