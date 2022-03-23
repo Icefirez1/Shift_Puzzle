@@ -2,12 +2,21 @@ import java.util.ArrayList;
 
 public class Board 
 {
-    private ArrayList<Tile> tiles; 
+    private ArrayList<Tile> tiles;
+
+    /**
+     * Create an empty Board with no Tiles
+     */
     public Board()
     {
         this.tiles = new ArrayList<>(); 
 
     }
+
+    /**
+     * Add the Tile obj to this Board
+     * @param obj the Tile to be added to the Board
+     */
     public void add(Tile obj)
     {
         tiles.add(obj);
