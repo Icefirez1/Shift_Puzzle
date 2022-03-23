@@ -1,5 +1,10 @@
-public class Tile
+import javafx.scene.control.Button;
+
+public class Tile extends Button
 {
+    // Standard Tile size
+    public static final int size = 150;
+
     private Integer num;
     private int x;
     private int y;
@@ -21,9 +26,19 @@ public class Tile
      */
     public Tile(Integer num, int x, int y)
     {
+        // Handle Button stuff
+        super(Integer.toString(num));
+
+        // Handle state
         this.num = num;
         this.x = x;
         this.y = y;
+
+        // Handle clicking
+        setOnAction(e -> {
+            // TODO: add proper Board call later
+            System.out.println("hi");
+        });
     }
 
     /**
