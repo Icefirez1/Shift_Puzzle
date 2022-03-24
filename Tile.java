@@ -51,4 +51,8 @@ public class Tile extends Button
     {
         return num; 
     }
+    public void setValue(Integer new_num)
+    {
+        num = new_num; 
+    }
 }
