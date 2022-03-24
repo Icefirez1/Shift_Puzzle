@@ -14,7 +14,9 @@ import java.util.function.DoubleUnaryOperator;
 
 public class App extends Application
 {
+    // TODO: replace grid with a Board
     private GridPane grid;
+    private BorderPane bp;
 
     public App()
     {
@@ -30,11 +32,9 @@ public class App extends Application
     {
         primary.setTitle("Shift Game");
 
-        BorderPane bp = new BorderPane(); 
+        this.bp = generateBorderPane(); 
 
-        bp.setCenter(grid);
-
-        Scene s = new Scene(bp, 694.20, 694.20);
+        Scene s = new Scene(bp);
         // Load stylesheet from external file
         // https://stackoverflow.com/a/22755350
         s.getStylesheets().add(getClass().getResource("main.css").toExternalForm());
@@ -50,5 +50,36 @@ public class App extends Application
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    // Create a BorderPane with all necessary UI for the game
+    private BorderPane generateBorderPane() {
+        // Make the BorderPane with the grid in the center
+        BorderPane bp = new BorderPane(grid);
+
+        // Make bp have the correct id for styling
+        bp.setId("main-pane");
+
+        // Make grid have the right id for styling
+        grid.setId("tile-grid");
+        
+        // Fill in the grid with all the tiles
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                // Make sure that this isn't the corner tile
+                // TODO: add some kind of null tile instead of nothing
+                if (j != 3 || i != 3) {
+                    grid.add(new Tile(j*4+i+1), i, j);
+                }
+            }
+        }
+
+        // Make a reset button
+        BorderPane buttonPane = new BorderPane();
+        Button resetButton = new Button("Reset");
+        buttonPane.setBottom(resetButton);
+        bp.setRight(buttonPane);
+
+        return bp;
     }
 }

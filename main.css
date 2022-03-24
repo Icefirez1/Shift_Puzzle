@@ -1,3 +1,11 @@
+#main-pane {
+    -fx-padding: 10px;
+}
+
+#tile-grid {
+    -fx-margin: 20px;
+}
+
 Tile {
     -fx-font-size: 50px;
 
@@ -9,4 +17,17 @@ Tile {
 
     -fx-max-width: 175px;
     -fx-max-height: 175px;
+}
+
+Button {
+    -fx-font-size: 25px;
+
+    -fx-min-width: 75px;
+    -fx-min-height: 50px;
+
+    -fx-pref-width: 100px;
+    -fx-pref-height: 75px;
+
+    -fx-max-width: 125px;
+    -fx-max-height: 100px;
 }

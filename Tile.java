@@ -6,6 +6,8 @@ public class Tile extends Button
     public static final int size = 150;
 
     private Integer num;
+    // TODO: does a Tile need to know its position?
+    // If so, is a 2D position or an index more useful?
     private int x;
     private int y;
 
