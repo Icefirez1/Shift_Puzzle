@@ -72,8 +72,8 @@ public class App extends Application
                 }
                 else
                 {
-                    Tile empty = new Tile(board, -1, j, i);
-                    board.add(empty);
+                    Tile empty = new Tile(board, -1);
+                    board.addTile(empty, j, i);
                     board.setEmptyTile(empty);
                 }
             }
