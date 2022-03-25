@@ -55,4 +55,22 @@ public class Tile extends Button
     {
         num = new_num; 
     }
+
+    /**
+     * Get the x position of this Tile
+     * @return the x position of this Tile
+     */
+    public int getX()
+    {
+        return x;
+    }
+
+    /**
+     * Get the y position of this Tile
+     * @return the y position of this Tile
+     */
+    public int getY()
+    {
+        return y;
+    }
 }

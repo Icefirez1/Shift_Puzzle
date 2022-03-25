@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import javafx.scene.layout.GridPane;
 
-public class Board //extends GridPane
+public class Board extends GridPane
 {
     private ArrayList<Tile> tiles; 
 
@@ -10,13 +10,25 @@ public class Board //extends GridPane
      */
     public Board()
     {
+        super();
         this.tiles = new ArrayList<>(); 
 
-        tiles.add(new Tile(-1));
+        // TODO: should a -1 Tile be added automatically?
+        // Manually add null/-1/empty tile?
+        /* tiles.add(new Tile(-1));
         for(int i = 1; i < 16; i++)
         {
            tiles.add(new Tile(i));
-        }
+        } */
+    }
+
+    /**
+     * Create a Board with all the Tiles from Tiles
+     * @param tiles a list of Tiles to have in the Board at the start
+     */
+    public Board(ArrayList<Tile> tiles) {
+        super();
+        this.tiles = tiles;
     }
 
     /**
@@ -25,14 +37,22 @@ public class Board //extends GridPane
      */
     public void add(Tile obj)
     {
+        // Add to the Board ArrayList
         tiles.add(obj);
+
+        // Add to the GridPane
+        add(obj, obj.getX(), obj.getY());
     }
+
+    // TODO: have swap visually swap Tiles as well by changing GridPane
+    // See GridPane's setRowIndex and setColumnIndex
     private void swap(int j, int k)
     {
         Tile tmp = tiles.get(j);
         tiles.set(j, tiles.get(k));
         tiles.set(k, tmp);
     } 
+
     public void swapTile(Tile swap_obj)
     {
         /*I think we should call this method everytime the button gets clicked*/

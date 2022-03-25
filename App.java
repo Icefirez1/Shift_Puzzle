@@ -14,13 +14,12 @@ import java.util.function.DoubleUnaryOperator;
 
 public class App extends Application
 {
-    // TODO: replace grid with a Board
-    private GridPane grid;
+    private Board board;
     private BorderPane bp;
 
     public App()
     {
-        grid = new GridPane(); 
+        board = new Board();
     }
     @Override
     public void init()
@@ -55,13 +54,13 @@ public class App extends Application
     // Create a BorderPane with all necessary UI for the game
     private BorderPane generateBorderPane() {
         // Make the BorderPane with the grid in the center
-        BorderPane bp = new BorderPane(grid);
+        BorderPane bp = new BorderPane(board);
 
         // Make bp have the correct id for styling
         bp.setId("main-pane");
 
         // Make grid have the right id for styling
-        grid.setId("tile-grid");
+        board.setId("title-grid");
         
         // Fill in the grid with all the tiles
         for (int i = 0; i < 4; i++) {
@@ -69,7 +68,7 @@ public class App extends Application
                 // Make sure that this isn't the corner tile
                 // TODO: add some kind of null tile instead of nothing
                 if (j != 3 || i != 3) {
-                    grid.add(new Tile(j*4+i+1), i, j);
+                    board.add(new Tile(j*4+i+1, i, j));
                 }
             }
         }
