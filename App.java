@@ -66,9 +66,15 @@ public class App extends Application
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 // Make sure that this isn't the corner tile
-                // TODO: add some kind of null tile instead of nothing
-                if (j != 3 || i != 3) {
-                    board.add(new Tile(j*4+i+1, i, j));
+                // TODO: swap back to corner empty Tile
+                if (j != 2 || i != 2) {
+                    board.add(new Tile(board, i*4+j+1, j, i));
+                }
+                else
+                {
+                    Tile empty = new Tile(board, -1, j, i);
+                    board.add(empty);
+                    board.setEmptyTile(empty);
                 }
             }
         }

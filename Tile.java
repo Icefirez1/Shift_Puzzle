@@ -5,9 +5,13 @@ public class Tile extends Button
     // Standard Tile size
     public static final int size = 150;
 
+    // Hold a reference to the parent Board so it can call Board functions
+    private Board board;
+
     private Integer num;
     // TODO: does a Tile need to know its position?
     // If so, is a 2D position or an index more useful?
+    // The 2D position could be acquired via getColumnIndex and getRowIndex in Board
     private int x;
     private int y;
 
@@ -15,9 +19,9 @@ public class Tile extends Button
      * Create a Tile with a value of num at (0, 0) relative to a Board
      * @param num the value of the tile
      */
-    public Tile(Integer num)
+    public Tile(Board board, Integer num)
     {
-        this(num, 0, 0);
+        this(board, num, 0, 0);
     }
 
     /**
@@ -26,10 +30,12 @@ public class Tile extends Button
      * @param x   the x position of the tile
      * @param y   the y position of the tile
      */
-    public Tile(Integer num, int x, int y)
+    public Tile(Board board, Integer num, int x, int y)
     {
         // Handle Button stuff
         super(Integer.toString(num));
+
+        this.board = board;
 
         // Handle state
         this.num = num;
@@ -38,8 +44,7 @@ public class Tile extends Button
 
         // Handle clicking
         setOnAction(e -> {
-            // TODO: add proper Board call later
-            System.out.println("hi");
+            board.swapTile(this);
         });
     }
 
@@ -72,5 +77,34 @@ public class Tile extends Button
     public int getY()
     {
         return y;
+    }
+
+    /**
+     * Set the x position of this Tile
+     * @param x the new x position of this Tile
+     */
+    public void setX(int x)
+    {
+        this.x = x;
+    }
+
+    /**
+     * Set the y position of this Tile
+     * @param y the new y position of this Tile
+     */
+    public void setY(int y)
+    {
+        this.y = y;
+    }
+
+    /**
+     * Set the new position of this Tile
+     * @param x the new x position of this Tile
+     * @param y the new y position of this Tile
+     */
+    public void setPosition(int x, int y)
+    {
+        this.x = x;
+        this.y = y;
     }
 }
