@@ -87,18 +87,26 @@ public class Board extends GridPane
         int emptyPos = tiles.indexOf(emptyTile);
         
         // Check if tilePos is visually above or below emptyPos
-        /* if (tilePos + 4 == emptyPos || tilePos -4 == emptyPos)
+        if (tilePos + 4 == emptyPos || tilePos -4 == emptyPos)
         {
             swap(tilePos, emptyPos);
-        } */
+        }
         // Check if tilePos is visually to the left of emptyPos
         // Special case for edges
+        if (tilePos + 1 == emptyPos && tilePos % 4 != 3)
+        {
+            swap(tilePos, emptyPos);
+        }
 
         // Check if tilePos is visually to the right of emptyPos
         // Special case for edges
+        if (tilePos - 1 == emptyPos && tilePos % 4 != 0)
+        {
+            swap(tilePos, emptyPos);
+        }
 
         // If Tile is to the left of empty
-        if(tilePos + 1 == emptyPos)
+        /* if(tilePos + 1 == emptyPos)
         {
             System.out.println(1);
             swap(tilePos, emptyPos);
@@ -120,7 +128,7 @@ public class Board extends GridPane
         {
             System.out.println(4);
             swap(tilePos, emptyPos);
-        }
+        } */
         // i still havent accounted for like those weird cases but I no longer have any motivation
 
         
