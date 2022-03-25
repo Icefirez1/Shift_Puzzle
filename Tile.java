@@ -16,21 +16,12 @@ public class Tile extends Button
     private int y;
 
     /**
-     * Create a Tile with a value of num at (0, 0) relative to a Board
-     * @param num the value of the tile
-     */
-    public Tile(Board board, Integer num)
-    {
-        this(board, num, 0, 0);
-    }
-
-    /**
-     * Create a Tile with a value of num at (x, y) relative to a Board
+     * Create a Tile with a value of num
      * @param num the value of the tile
      * @param x   the x position of the tile
      * @param y   the y position of the tile
      */
-    public Tile(Board board, Integer num, int x, int y)
+    public Tile(Board board, Integer num)
     {
         // Handle Button stuff
         super(Integer.toString(num));
@@ -39,8 +30,6 @@ public class Tile extends Button
 
         // Handle state
         this.num = num;
-        this.x = x;
-        this.y = y;
 
         // Handle clicking
         setOnAction(e -> {
@@ -61,50 +50,50 @@ public class Tile extends Button
         num = new_num; 
     }
 
-    /**
+    /* *
      * Get the x position of this Tile
      * @return the x position of this Tile
      */
-    public int getX()
+    /* public int getX()
     {
         return x;
-    }
+    } */
 
     /**
      * Get the y position of this Tile
      * @return the y position of this Tile
      */
-    public int getY()
+    /* public int getY()
     {
         return y;
-    }
+    } */
 
     /**
      * Set the x position of this Tile
      * @param x the new x position of this Tile
      */
-    public void setX(int x)
+    /* public void setX(int x)
     {
         this.x = x;
-    }
+    } */
 
     /**
      * Set the y position of this Tile
      * @param y the new y position of this Tile
      */
-    public void setY(int y)
+    /* public void setY(int y)
     {
         this.y = y;
-    }
+    } */
 
     /**
      * Set the new position of this Tile
      * @param x the new x position of this Tile
      * @param y the new y position of this Tile
      */
-    public void setPosition(int x, int y)
+    /* public void setPosition(int x, int y)
     {
         this.x = x;
         this.y = y;
-    }
+    } */
 }

@@ -38,8 +38,10 @@ public class Board extends GridPane
     /**
      * Add the Tile obj to this Board
      * @param obj the Tile to be added to the Board
+     * @param x   the x coordinate to add the Tile at
+     * @param y   the y coordinate to add the Tile at
      */
-    public void add(Tile obj)
+    public void addTile(Tile obj, int x, int y)
     {
         // Add to the Board ArrayList
         // TODO: take obj's position into account
@@ -47,37 +49,30 @@ public class Board extends GridPane
         tiles.add(obj);
 
         // Add to the GridPane
-        add(obj, obj.getX(), obj.getY());
+        add(obj, x, y);
     }
 
-    // TODO: have swap visually swap Tiles as well by changing GridPane
-    // See GridPane's setRowIndex and setColumnIndex
-    // TODO: have swap actually alter the ArrayList internally
     private void swap(int j, int k)
     {
+        // Get the Tiles
         Tile a = tiles.get(j);
         Tile b = tiles.get(k);
+
+        // Get the position in the GridPane
+        int ax = getRowIndex(a);
+        int ay = getColumnIndex(a);
+        int bx = getRowIndex(b);
+        int by = getColumnIndex(b);
 
         // Swap the Tiles in the ArrayList
         tiles.set(j, b);
         tiles.set(k, a);
         
         // Visually swap the Tiles
-        int ax = getRowIndex(a);
-        int ay = getColumnIndex(a);
-        int bx = getRowIndex(b);
-        int by = getColumnIndex(b);
-
         setRowIndex(a, bx);
         setColumnIndex(a, by);
         setRowIndex(b, ax);
         setColumnIndex(b, ay);
-
-        // Swap the Tiles' internal position
-        int tx = a.getX();
-        int ty = a.getY();
-        a.setPosition(b.getX(), b.getY());
-        b.setPosition(tx, ty);
     }
 
     public void swapTile(Tile swap_obj)

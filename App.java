@@ -68,12 +68,12 @@ public class App extends Application
                 // Make sure that this isn't the corner tile
                 // TODO: swap back to corner empty Tile
                 if (j != 2 || i != 2) {
-                    board.add(new Tile(board, i*4+j+1, j, i));
+                    board.addTile(new Tile(board, i*4+j+1), j, i);
                 }
                 else
                 {
-                    Tile empty = new Tile(board, -1, j, i);
-                    board.add(empty);
+                    Tile empty = new Tile(board, -1);
+                    board.addTile(empty, j, i);
                     board.setEmptyTile(empty);
                 }
             }
