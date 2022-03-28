@@ -30,9 +30,42 @@ public class Board extends GridPane
      * Create a Board with all the Tiles from Tiles
      * @param tiles a list of Tiles to have in the Board at the start
      */
-    public Board(ArrayList<Tile> tiles) {
+    public Board(ArrayList<Tile> tileList) {
         super();
+        
+        /* // Add Tiles to internal ArrayList
         this.tiles = tiles;
+
+        // Add Tiles to GridPane
+        // Add as many Tiles as are in tiles, but no more than 16
+        int x = 0;
+        int y = 0;
+        for (int i = 0; i < Math.min(tiles.size(), 16); i++) {
+            // Add Tile to GridPane
+            add(tiles.get(i), x, y);
+            
+            // Move to next position, wrapping as necessary
+            x++;
+            if (x >= 4) {
+                x %= 4;
+                y++;
+            }
+        } */
+        this.tiles = new ArrayList<>();
+
+        int x = 0;
+        int y = 0;
+        for (Tile t : tileList) {
+            // Add the Tile to the ArrayList
+            this.addTile(t, x, y);
+
+            // Move to the next position, wrapping as necessary
+            x++;
+            if (x >= 4) {
+                x %= 4;
+                y++;
+            }
+        }
     }
 
     /**
@@ -77,7 +110,7 @@ public class Board extends GridPane
 
     public void swapTile(Tile swap_obj)
     {
-        /*I think we should call this method everytime the button gets clicked*/
+        // Get the index of the current Tile and the empty Tile
         int tilePos = tiles.indexOf(swap_obj);
         int emptyPos = tiles.indexOf(emptyTile);
         
@@ -98,35 +131,7 @@ public class Board extends GridPane
         if (tilePos - 1 == emptyPos && tilePos % 4 != 0)
         {
             swap(tilePos, emptyPos);
-        }
-
-        // If Tile is to the left of empty
-        /* if(tilePos + 1 == emptyPos)
-        {
-            System.out.println(1);
-            swap(tilePos, emptyPos);
-        }
-        // If the Tile is to the right of empty
-        else if(tilePos - 1 == emptyPos)
-        {
-            System.out.println(2);
-            swap(tilePos, emptyPos);
-        }
-        // If the Tile is above empty
-        else if(tilePos + 4 == emptyPos)
-        {
-            System.out.println(3);
-            swap(tilePos, emptyPos);
-        }
-        // If the Tile is below empty
-        else if(tilePos - 4 == emptyPos)
-        {
-            System.out.println(4);
-            swap(tilePos, emptyPos);
-        } */
-        // i still havent accounted for like those weird cases but I no longer have any motivation
-
-        
+        }      
     }
     public String toString()
     {
@@ -155,7 +160,6 @@ public class Board extends GridPane
     
     public static void main(String[] args)
     {
-        Board test = new Board(); 
-        System.out.println(test);
+        App.main(null);
     }
 }

@@ -9,6 +9,8 @@ import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.geometry.Pos;
+
+import java.util.ArrayList;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
 
@@ -17,10 +19,6 @@ public class App extends Application
     private Board board;
     private BorderPane bp;
 
-    public App()
-    {
-        board = new Board();
-    }
     @Override
     public void init()
     {
@@ -53,31 +51,49 @@ public class App extends Application
 
     // Create a BorderPane with all necessary UI for the game
     private BorderPane generateBorderPane() {
-        // Make the BorderPane with the grid in the center
-        BorderPane bp = new BorderPane(board);
+        // Make the BorderPane
+        BorderPane bp = new BorderPane();
 
         // Make bp have the correct id for styling
         bp.setId("main-pane");
 
-        // Make grid have the right id for styling
-        board.setId("title-grid");
+        // Make an empty Tile ahead of time
+        Tile empty = new Tile(-1);
         
-        // Fill in the grid with all the tiles
+        // Fill in an ArrayList with all the tiles
+        ArrayList<Tile> tiles = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 // Make sure that this isn't the corner tile
-                // TODO: swap back to corner empty Tile
-                if (j != 2 || i != 2) {
-                    board.addTile(new Tile(board, i*4+j+1), j, i);
+                if (j != 3 || i != 3) {
+                    tiles.add(new Tile(i*4+j+1));
                 }
                 else
                 {
-                    Tile empty = new Tile(board, -1);
-                    board.addTile(empty, j, i);
-                    board.setEmptyTile(empty);
+                    tiles.add(empty);
                 }
             }
         }
+
+        // Apply a Permutation
+        Permutation p = Permutation.randomPermutation(16, 100);
+        p.applyToList(tiles);
+
+        // Make the board and add it to the BorderPane
+        this.board = new Board(tiles);
+        bp.setCenter(board);
+
+        // Update all the Tiles to know that board is their parent
+        for (Tile t : tiles)
+        {
+            t.setBoard(this.board);
+        }
+
+        // Set the empty Tile
+        this.board.setEmptyTile(empty);
+
+        // Make the Board have the right id for styling
+        board.setId("title-grid");
 
         // Make a reset button
         BorderPane buttonPane = new BorderPane();
