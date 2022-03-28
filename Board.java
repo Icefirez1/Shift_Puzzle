@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Arrays;
+
 import javafx.scene.layout.GridPane;
 
 public class Board extends GridPane
@@ -118,12 +120,14 @@ public class Board extends GridPane
         if (tilePos + 4 == emptyPos || tilePos -4 == emptyPos)
         {
             swap(tilePos, emptyPos);
+            System.out.println(check());
         }
         // Check if tilePos is visually to the left of emptyPos
         // Special case for edges
         if (tilePos + 1 == emptyPos && tilePos % 4 != 3)
         {
             swap(tilePos, emptyPos);
+            System.out.println(check());
         }
 
         // Check if tilePos is visually to the right of emptyPos
@@ -156,6 +160,34 @@ public class Board extends GridPane
      */
     public void setEmptyTile(Tile t) {
         this.emptyTile = t;
+    }
+
+    /**
+     * checks if the -1 tile is in top left or top right
+     * @return true if tile on top left or bottom right AND List is ordered, false otherwise
+     */
+    public Boolean check()
+    {
+        ArrayList<Integer> validNumTop = new ArrayList<>(Arrays.asList(-1,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15));
+        ArrayList<Integer> validNumBottom = new ArrayList<>(Arrays.asList(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,-1));
+        for(int i = 0; i < 16; i++)
+        {
+            if(tiles.get(i).value() != validNumTop.get(i) && tiles.get(15).value() != -1)
+            {
+                System.out.println(i);
+                return false;
+            }
+        }
+        for(int i = 0; i < 16; i++)
+        {
+            if(tiles.get(i).value() != validNumBottom.get(i) && tiles.get(0).value() != -1)
+            {
+                System.out.println(i);
+                return false;
+            }
+        }
+        
+        return true; 
     }
     
     public static void main(String[] args)
