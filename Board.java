@@ -120,14 +120,12 @@ public class Board extends GridPane
         if (tilePos + 4 == emptyPos || tilePos -4 == emptyPos)
         {
             swap(tilePos, emptyPos);
-            System.out.println(check());
         }
         // Check if tilePos is visually to the left of emptyPos
         // Special case for edges
         if (tilePos + 1 == emptyPos && tilePos % 4 != 3)
         {
             swap(tilePos, emptyPos);
-            System.out.println(check());
         }
 
         // Check if tilePos is visually to the right of emptyPos
@@ -174,7 +172,6 @@ public class Board extends GridPane
         {
             if(tiles.get(i).value() != validNumTop.get(i) && tiles.get(15).value() != -1)
             {
-                System.out.println(i);
                 return false;
             }
         }
@@ -182,7 +179,6 @@ public class Board extends GridPane
         {
             if(tiles.get(i).value() != validNumBottom.get(i) && tiles.get(0).value() != -1)
             {
-                System.out.println(i);
                 return false;
             }
         }
