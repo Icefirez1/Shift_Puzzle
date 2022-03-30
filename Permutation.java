@@ -32,11 +32,22 @@ public class Permutation
         }
 
         // Generate the random list
+        // Generate numbers in pairs to make sure that non-swaps don't happen
         Random rand = new Random();
+
         int[] indices = new int[2*numSwaps];
-        for (int i = 0; i < 2*numSwaps; i++)
+        for (int i = 0; i < 2*numSwaps; i += 2)
         {
+            // Generate first number in swap
             indices[i] = rand.nextInt(n);
+
+            // Regenerate the second number until it isn't a duplicate
+            int a = rand.nextInt(n);
+            while (a == indices[i])
+            {
+                a = rand.nextInt(n);
+            }
+            indices[i+1] = a;
         }
 
         return new Permutation(n, indices);
