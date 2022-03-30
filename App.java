@@ -90,6 +90,7 @@ public class App extends Application
         }
 
         // Set the empty Tile
+        empty.setVisible(false);
         this.board.setEmptyTile(empty);
 
         // Make the Board have the right id for styling
