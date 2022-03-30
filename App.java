@@ -76,7 +76,7 @@ public class App extends Application
     @Override
     public void stop()
     {
-        
+
     }
 
     public static void main(String[] args) {
@@ -91,6 +91,28 @@ public class App extends Application
         // Make bp have the correct id for styling
         bp.setId("main-pane");
 
+        // Make the board and add it to the BorderPane
+        this.board = generateBoard();
+        bp.setCenter(this.board);
+
+        // Make a reset button
+        BorderPane buttonPane = new BorderPane();
+        Button resetButton = new Button("Reset");
+        resetButton.setOnAction( e -> 
+        {
+            //reset it or whatever
+            this.board = generateBoard();
+            bp.setCenter(this.board);
+        });
+        buttonPane.setBottom(resetButton);
+        bp.setRight(buttonPane);
+
+        return bp;
+    }
+
+    // Generate a Board that is guaranteed to be solvable
+    private Board generateBoard()
+    {
         // Make an empty Tile ahead of time
         Tile empty = new Tile(-1);
         
@@ -102,58 +124,32 @@ public class App extends Application
                 if (j != 3 || i != 3) {
                     tiles.add(new Tile(i*4+j+1));
                 }
-                else
-                {
-                    tiles.add(empty);
-                }
             }
         }
 
         // Apply a Permutation
-        Permutation p = Permutation.randomPermutation(16, 100);
+        Permutation p = Permutation.randomPermutation(15, 100);
         p.applyToList(tiles);
 
-        // Make the board and add it to the BorderPane
-        this.board = new Board(tiles);
-        bp.setCenter(board);
+        // Add the empty Tile
+        tiles.add(empty);
 
-        // Update all the Tiles to know that board is their parent
+        // Add the Tiles to a board
+        Board b = new Board(tiles);
+
+        // Make the Tiles know their Board
         for (Tile t : tiles)
         {
-            t.setBoard(this.board);
+            t.setBoard(b);
         }
 
-        // Set the empty Tile
+        // Set the empty Tile and make it invisible
         empty.setVisible(false);
-        this.board.setEmptyTile(empty);
+        b.setEmptyTile(empty);
 
         // Make the Board have the right id for styling
-        board.setId("title-grid");
+        b.setId("title-grid");
 
-        // Make a reset button
-        BorderPane buttonPane = new BorderPane();
-        Button resetButton = new Button("Reset");
-        resetButton.setOnAction( e -> 
-        {
-            //reset it or whatever
-            // Apply a new permutation
-            Permutation k = Permutation.randomPermutation(16, 100);
-            k.applyToList(tiles);
-
-            // Make a new board
-            this.board = new Board(tiles);
-            this.board.setEmptyTile(empty);
-            bp.setCenter(this.board);
-
-            // Update all the tiles to know the new board
-            for (Tile t : tiles)
-            {
-                t.setBoard(this.board);
-            }
-        });
-        buttonPane.setBottom(resetButton);
-        bp.setRight(buttonPane);
-
-        return bp;
+        return b;
     }
 }
