@@ -144,6 +144,51 @@ public class Board extends GridPane
             swap(tilePos, emptyPos);
         }      
     }
+
+    /**
+     * Swap the empty Tile with a Tile at the position (x,y)
+     * relative to the empty Tile
+     * @param x the relative x coordinate of the Tile to swap
+     * @param y the relative y coordinate of the Tile to swap
+     */
+    public void swapTileRelativeToEmpty(int x, int y)
+    {
+        // Get the coordinates of the empty Tile
+        int ex = getColumnIndex(emptyTile);
+        int ey = getRowIndex(emptyTile);
+
+        // Calculate the new offset and get the new Tile
+        int tx = ex + x;
+        int ty = ey + y;
+        Tile t = getTile(tx, ty);
+
+        // If t isn't null, swap
+        if (t != null)
+        {
+            swapTile(t);
+        }
+    }
+
+    /**
+     * Get the Tile at (x, y)
+     * @param x the x coordinate of the Tile to look for
+     * @param y the y coordinate of the Tile to look for
+     * @return the Tile at (x,y) or null if no such Tile was found
+     */
+    public Tile getTile(int x, int y)
+    {
+        for (Tile t : tiles)
+        {
+            int tx = getColumnIndex(t);
+            int ty = getRowIndex(t);
+            if (tx == x && ty == y)
+            {
+                return t;
+            }
+        }
+        return null;
+    }
+
     public String toString()
     {
         StringBuffer sb = new StringBuffer();
@@ -167,6 +212,14 @@ public class Board extends GridPane
      */
     public void setEmptyTile(Tile t) {
         this.emptyTile = t;
+    }
+
+    /**
+     * Get the empty Tile for this Board
+     * @return the empty Tile for this board
+     */
+    public Tile getEmptyTile() {
+        return this.emptyTile;
     }
 
     /**

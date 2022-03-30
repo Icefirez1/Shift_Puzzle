@@ -1,5 +1,7 @@
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -9,6 +11,7 @@ import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.geometry.Pos;
+import javafx.scene.input.KeyEvent;
 
 import java.util.ArrayList;
 import java.util.function.DoubleBinaryOperator;
@@ -29,12 +32,44 @@ public class App extends Application
     {
         primary.setTitle("Shift Game");
 
-        this.bp = generateBorderPane(); 
+        // Make the center border pane
+        this.bp = generateBorderPane();
 
         Scene s = new Scene(bp);
         // Load stylesheet from external file
         // https://stackoverflow.com/a/22755350
         s.getStylesheets().add(getClass().getResource("main.css").toExternalForm());
+
+        // Add listeners for keyboard controls
+        // TODO: should left move the empty space left or slide a tile left?
+        s.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
+            switch (e.getCode()) {
+                case W:
+                case UP:
+                    //board.swapTileRelativeToEmpty(0, -1);
+                    board.swapTileRelativeToEmpty(0, 1);
+                    break;
+                case S:
+                case DOWN:
+                    //board.swapTileRelativeToEmpty(0, 1);
+                    board.swapTileRelativeToEmpty(0, -1);
+                    break;
+                case A:
+                case LEFT:
+                    //board.swapTileRelativeToEmpty(-1, 0);
+                    board.swapTileRelativeToEmpty(1, 0);
+                    break;
+                case D:
+                case RIGHT:
+                    //board.swapTileRelativeToEmpty(1, 0);
+                    board.swapTileRelativeToEmpty(-1, 0);
+                    break;
+                // Default helps suppress ~90 warnings for some reason
+                default:
+                    break;
+            }
+        });
+        
         
         primary.setScene(s);
         primary.show();
