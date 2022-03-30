@@ -98,6 +98,15 @@ public class App extends Application
         // Make a reset button
         BorderPane buttonPane = new BorderPane();
         Button resetButton = new Button("Reset");
+        resetButton.setOnAction( e -> 
+        {
+            //reset it or whatever
+            Permutation k = Permutation.randomPermutation(16, 100);
+            k.applyToList(tiles);
+            board = new Board(tiles);
+            bp.setCenter(board);
+            
+        });
         buttonPane.setBottom(resetButton);
         bp.setRight(buttonPane);
 

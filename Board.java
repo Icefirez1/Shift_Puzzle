@@ -84,7 +84,16 @@ public class Board extends GridPane
         tiles.add(obj);
 
         // Add to the GridPane
-        add(obj, x, y);
+        if (obj.value() == -1)
+        {
+            obj.setText("");
+            add(obj, x, y);
+        }
+        else
+        {
+            add(obj, x, y);
+        }
+
     }
 
     private void swap(int j, int k)
