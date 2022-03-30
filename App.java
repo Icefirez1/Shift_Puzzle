@@ -40,7 +40,6 @@ public class App extends Application
         s.getStylesheets().add(getClass().getResource("main.css").toExternalForm());
 
         // Add listeners for keyboard controls
-        // TODO: should left move the empty space left or slide a tile left?
         s.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
             switch (e.getCode()) {
                 case W:

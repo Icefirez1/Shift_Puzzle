@@ -165,10 +165,10 @@ public class Board extends GridPane
         int ty = ey + y;
         Tile t = getTile(tx, ty);
 
-        // If t isn't null, swap
+        // If t isn't null, "click" it
         if (t != null)
         {
-            swapTile(t);
+            t.fire();
         }
     }
 
