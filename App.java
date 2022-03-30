@@ -102,11 +102,20 @@ public class App extends Application
         resetButton.setOnAction( e -> 
         {
             //reset it or whatever
+            // Apply a new permutation
             Permutation k = Permutation.randomPermutation(16, 100);
             k.applyToList(tiles);
-            board = new Board(tiles);
-            bp.setCenter(board);
-            
+
+            // Make a new board
+            this.board = new Board(tiles);
+            this.board.setEmptyTile(empty);
+            bp.setCenter(this.board);
+
+            // Update all the tiles to know the new board
+            for (Tile t : tiles)
+            {
+                t.setBoard(this.board);
+            }
         });
         buttonPane.setBottom(resetButton);
         bp.setRight(buttonPane);
