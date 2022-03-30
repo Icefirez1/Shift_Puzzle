@@ -11,6 +11,8 @@ public class Board extends GridPane
     // Keep track of the empty tile
     private Tile emptyTile;
 
+    //Keep track of the solveable of the board 
+    public Boolean solved = false; 
     /**
      * Create an empty Board with no Tiles
      */
@@ -129,6 +131,7 @@ public class Board extends GridPane
         if (tilePos + 4 == emptyPos || tilePos -4 == emptyPos)
         {
             swap(tilePos, emptyPos);
+
         }
         // Check if tilePos is visually to the left of emptyPos
         // Special case for edges

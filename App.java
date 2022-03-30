@@ -31,7 +31,6 @@ public class App extends Application
     public void start(Stage primary)
     {
         primary.setTitle("Shift Game");
-
         // Make the center border pane
         this.bp = generateBorderPane();
 
