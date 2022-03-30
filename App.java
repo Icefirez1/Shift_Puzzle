@@ -77,7 +77,7 @@ public class App extends Application
     @Override
     public void stop()
     {
-        
+
     }
 
     public static void main(String[] args) {
@@ -103,16 +103,14 @@ public class App extends Application
                 if (j != 3 || i != 3) {
                     tiles.add(new Tile(i*4+j+1));
                 }
-                else
-                {
-                    tiles.add(empty);
-                }
             }
         }
 
         // Apply a Permutation
-        Permutation p = Permutation.randomPermutation(16, 100);
+        Permutation p = Permutation.randomPermutation(15, 100);
         p.applyToList(tiles);
+
+        tiles.add(empty);
 
         // Make the board and add it to the BorderPane
         this.board = new Board(tiles);
