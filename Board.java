@@ -132,6 +132,7 @@ public class Board extends GridPane
         {
             swap(tilePos, emptyPos);
 
+
         }
         // Check if tilePos is visually to the left of emptyPos
         // Special case for edges

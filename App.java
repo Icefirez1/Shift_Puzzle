@@ -10,6 +10,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 import javafx.geometry.Pos;
 import javafx.scene.input.KeyEvent;
 
@@ -21,6 +22,7 @@ public class App extends Application
 {
     private Board board;
     private BorderPane bp;
+    private Text t; 
 
     @Override
     public void init()
@@ -103,7 +105,10 @@ public class App extends Application
             this.board = generateBoard();
             bp.setCenter(this.board);
         });
+
+        
         buttonPane.setBottom(resetButton);
+        buttonPane.setTop(t);
         bp.setRight(buttonPane);
 
         return bp;
