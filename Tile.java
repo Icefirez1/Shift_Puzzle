@@ -1,5 +1,5 @@
 import javax.swing.plaf.synth.SynthListUI;
-
+import javax.swing.*;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
 
@@ -42,12 +42,7 @@ public class Tile extends Button
             this.board.swapTile(this);
             this.board.solved = this.board.check();
             System.out.println(this.board.solved); 
-            if(this.board.solved)
-            {
-                System.out.println("yuh");
-                //Runtime.exec("");
-                // I gotta figure out how to like run the won.java popup whenever this.board is solved
-            }
+            this.board.displayWon();
         
         });
     }
