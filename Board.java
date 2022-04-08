@@ -1,6 +1,9 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import javafx.scene.layout.GridPane;
 
 public class Board extends GridPane
@@ -137,6 +140,7 @@ public class Board extends GridPane
         {
             swap(tilePos, emptyPos);
             return true;
+
 
         }
         // Check if tilePos is visually to the left of emptyPos
@@ -277,9 +281,27 @@ public class Board extends GridPane
         
         return true; 
     }
+    /**
+     * display that they won
+     */
+    public void displayWon()
+    {
+        System.out.println(solved);
+        if(solved)
+        {
+            JFrame jFrame = new JFrame();
+            JOptionPane.showMessageDialog(jFrame, "You Won!");
+        }
+    }
     
     public static void main(String[] args)
     {
         App.main(null);
+        Board yuh = new Board(); 
+        yuh.solved = true; 
+        yuh.displayWon();
+
     }
+
+   
 }

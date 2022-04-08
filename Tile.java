@@ -1,3 +1,6 @@
+import javax.swing.plaf.synth.SynthListUI;
+import javax.swing.*;
+import javafx.application.Platform;
 import javafx.scene.control.Button;
 
 public class Tile extends Button
@@ -38,6 +41,9 @@ public class Tile extends Button
         setOnAction(e -> {
             this.board.swapTile(this);
             this.board.solved = this.board.check();
+            System.out.println(this.board.solved); 
+            this.board.displayWon();
+        
         });
     }
 
