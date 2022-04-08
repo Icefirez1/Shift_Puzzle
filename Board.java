@@ -286,7 +286,6 @@ public class Board extends GridPane
      */
     public void displayWon()
     {
-        System.out.println(solved);
         if(solved)
         {
             JFrame jFrame = new JFrame();
