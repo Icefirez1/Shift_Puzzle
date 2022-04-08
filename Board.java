@@ -23,14 +23,6 @@ public class Board extends GridPane
     {
         super();
         this.tiles = new ArrayList<>(); 
-
-        // TODO: should a -1/null/empty Tile be added automatically?
-        // Manually add null/-1/empty tile?
-        /* tiles.add(new Tile(-1));
-        for(int i = 1; i < 16; i++)
-        {
-           tiles.add(new Tile(i));
-        } */
     }
 
     /**
@@ -84,8 +76,6 @@ public class Board extends GridPane
     public void addTile(Tile obj, int x, int y)
     {
         // Add to the Board ArrayList
-        // TODO: take obj's position into account
-        // Ex. Tile at (2,3) should be at index 3*4+2==14
         tiles.add(obj);
 
         // Add to the GridPane
