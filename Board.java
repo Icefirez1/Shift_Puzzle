@@ -121,7 +121,12 @@ public class Board extends GridPane
         setColumnIndex(b, ay);
     }
 
-    public void swapTile(Tile swap_obj)
+    /**
+     * Swap swap_obj with the empty Tile if it is next to it
+     * @param swap_obj the Tile to try to swap
+     * @return true if a swap happened, false otherwise
+     */
+    public boolean swapTile(Tile swap_obj)
     {
         // Get the index of the current Tile and the empty Tile
         int tilePos = tiles.indexOf(swap_obj);
@@ -131,6 +136,7 @@ public class Board extends GridPane
         if (tilePos + 4 == emptyPos || tilePos -4 == emptyPos)
         {
             swap(tilePos, emptyPos);
+            return true;
 
         }
         // Check if tilePos is visually to the left of emptyPos
@@ -138,6 +144,7 @@ public class Board extends GridPane
         if (tilePos + 1 == emptyPos && tilePos % 4 != 3)
         {
             swap(tilePos, emptyPos);
+            return true;
         }
 
         // Check if tilePos is visually to the right of emptyPos
@@ -145,7 +152,11 @@ public class Board extends GridPane
         if (tilePos - 1 == emptyPos && tilePos % 4 != 0)
         {
             swap(tilePos, emptyPos);
-        }      
+            return true;
+        }
+
+        // If no if statements were it, return a failure
+        return false;
     }
 
     /**
@@ -186,6 +197,22 @@ public class Board extends GridPane
             int ty = getRowIndex(t);
             if (tx == x && ty == y)
             {
+                return t;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Get the Tile with the given value
+     * @param val the value of the Tile to look for
+     * @return the Tile with the specified value or null if no such Tile was found
+     */
+    public Tile getTile(int val)
+    {
+        for (Tile t : tiles)
+        {
+            if (t.value() == val) {
                 return t;
             }
         }

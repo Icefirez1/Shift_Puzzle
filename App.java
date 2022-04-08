@@ -106,6 +106,12 @@ public class App extends Application
         buttonPane.setBottom(resetButton);
         bp.setRight(buttonPane);
 
+        Button solveButton = new Button("Solve");
+        buttonPane.setCenter(solveButton);
+        solveButton.setOnAction(e -> {
+            Solver.solve(board);
+        });
+
         return bp;
     }
 
