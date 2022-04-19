@@ -1215,40 +1215,74 @@ public class Solver {
     public static void solve(Board board) {
         Solver s = new Solver(board);
 
+        boolean solveInOneClick = false;
+
         // Solve 1-3
         for (int i = 1; i <= 3; i++) {
-            while (!s.moveUpperLeftTowardsDestination(i));
+            while (!s.moveUpperLeftTowardsDestination(i)) {
+                if (!solveInOneClick) {
+                    return;
+                }
+            }
             s.maxSortedValue++;
         }
 
         // Solve 4
-        while (!s.move48TowardsDestination(4));
+        while (!s.move48TowardsDestination(4)) {
+            if (!solveInOneClick) {
+                return;
+            }
+        }
         s.maxSortedValue++;
 
         // Solve 5-7
         for (int i = 5; i <= 7; i++) {
-            while (!s.moveUpperLeftTowardsDestination(i));
+            while (!s.moveUpperLeftTowardsDestination(i)) {
+                if (!solveInOneClick) {
+                    return;
+                }
+            }
             s.maxSortedValue++;
         }
 
         // Solve 8
-        while (!s.move48TowardsDestination(8));
+        while (!s.move48TowardsDestination(8)) {
+            if (!solveInOneClick) {
+                return;
+            }
+        }
         s.maxSortedValue++;
 
         // Solve 9
-        while (!s.moveUpperLeftTowardsDestination(9));
+        while (!s.moveUpperLeftTowardsDestination(9)) {
+            if (!solveInOneClick) {
+                return;
+            }
+        }
         s.maxSortedValue++;
 
         // Solve 10
-        while (!s.move10TowardsDestination());
+        while (!s.move10TowardsDestination()) {
+            if (!solveInOneClick) {
+                return;
+            }
+        }
         s.maxSortedValue++;
 
         // Solve 11
-        while (!s.move11TowardsDestination());
+        while (!s.move11TowardsDestination()) {
+            if (!solveInOneClick) {
+                return;
+            }
+        }
         s.maxSortedValue++;
         
         // Solve 12
-        while (!s.move12TowardsDestination());
+        while (!s.move12TowardsDestination()) {
+            if (!solveInOneClick) {
+                return;
+            }
+        }
         s.maxSortedValue++;
         
         // Solve 13,14,15

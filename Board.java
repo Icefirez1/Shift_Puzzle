@@ -286,11 +286,5 @@ public class Board extends GridPane
     public static void main(String[] args)
     {
         App.main(null);
-        Board yuh = new Board(); 
-        yuh.solved = true; 
-        yuh.displayWon();
-
     }
-
-   
 }
