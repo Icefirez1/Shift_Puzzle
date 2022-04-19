@@ -53,6 +53,15 @@ public class App extends Application
                     //board.swapTileRelativeToEmpty(1, 0);
                     board.swapTileRelativeToEmpty(-1, 0);
                     break;
+                case R:
+                    BorderPane x = (BorderPane) bp.getRight();
+                    Button reset = (Button) x.getBottom();
+                    reset.fire();
+                    break;
+                case T:
+                    BorderPane y = (BorderPane) bp.getRight();
+                    Button solve = (Button) y.getCenter();
+                    solve.fire();
                 // Default helps suppress ~90 warnings for some reason
                 default:
                     break;

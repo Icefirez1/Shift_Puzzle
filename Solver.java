@@ -111,7 +111,6 @@ public class Solver {
     }
 
     // Does the exact some thing as rotate2x2(int, int, int, int, int, int)
-    @SuppressWarnings("unused")
     private boolean rotate2x2(Point s, Point start, Point end) {
         return rotate2x2(s.x(), s.y(), start.x(), start.y(), end.x(), end.y());
     }
@@ -222,7 +221,6 @@ public class Solver {
     }
 
     // Does the exact some thing as rotate3x2(int, int, int, int, int, int)
-    @SuppressWarnings("unused")
     private boolean rotate3x2(Point s, Point start, Point end) {
         return rotate3x2(s.x(), s.y(), start.x(), start.y(), end.x(), end.y());
     }
@@ -461,7 +459,6 @@ public class Solver {
     // Find the coordinates of the upper left corner of the
     // 2x2 square with the given Tile and no solved tiles
     // Returns null if no such square exists
-    @SuppressWarnings("unused")
     private Point find2x2Pos(Tile t) {
         // Get the absolute x and y position of the Tile
         int absx = GridPane.getColumnIndex(t);
@@ -522,7 +519,6 @@ public class Solver {
     // which is 1 more than the current maxSortedValue
     // If a move occurs, the function will return true
     // If no moves occur, the function will return false
-    @SuppressWarnings("unused")
     private boolean moveEmptyToPosition(int x, int y) {
         return moveEmptyToPosition(new Point(x, y));
     }
@@ -631,31 +627,636 @@ public class Solver {
         throw new PathNotFoundExcpetion();
     }
 
+    // Calculate the taxicab distance between 2 points
+    private int taxicabDistance(Point a, Point b) {
+        return taxicabDistance(a.x(), a.y(), b.x(), b.y());
+    }
+
+    // Same thing as taxicabDistance(Point, Point)
+    private int taxicabDistance(int ax, int ay, int bx, int by) {
+        return Math.abs(ax - bx) + Math.abs(ay - by);
+    }
+
     // Custom mod function to force mod to be positive
     // https://stackoverflow.com/a/4412200/13996174
     private int mod(int n, int m) {
         return (n % m + m) % m;
     }
 
+    // Move a Tile from the upper left square of the board into position
+    // Valid tiles are 1, 2, 3, 5, 6, 7, 9
+    // 10 and 11 are covered in a special case
+    // Returns true if the Tile is at its final destination
+    //   and false otherwise
+    private boolean moveUpperLeftTowardsDestination(int num) {
+        // Check if num is a valid num
+        int validNums[] = {1, 2, 3, 5, 6, 7, 9};
+        boolean isValid = false;
+        for (int i : validNums) {
+            if (num == i) {
+                isValid = true;
+                break;
+            }
+        }
+
+        // If isValid is still false, it is invalid
+        // Raise an exception
+        if (!isValid) {
+            throw new IllegalArgumentException("Tile value is out of bounds.");
+        }
+
+        // Get the Tile and its current position
+        Tile cur = board.getTile(num);
+        Point curPos = new Point(GridPane.getColumnIndex(cur), GridPane.getRowIndex(cur));
+
+        // Find the 2x2 with cur in it
+        Point square = find2x2Pos(cur);
+
+        // Get the goal position for the Tile
+        Point finalGoal = switch (num) {
+            case 1 -> new Point(0, 0);
+            case 2 -> new Point(1, 0);
+            case 3 -> new Point(2, 0);
+            case 5 -> new Point(0, 1);
+            case 6 -> new Point(1, 1);
+            case 7 -> new Point(2, 1);
+            case 9 -> new Point(0, 2);
+            default -> new Point(-1, -1);
+        };
+
+        // If the Tile is already at the final position,
+        //   exit without doing anything
+        if (finalGoal.equals(curPos)) {
+            return true;
+        }
+
+        // Find the best point for the 2x2
+        // Start at the upper left corner of the square
+        Point bestPoint = square;
+        int bestDist = taxicabDistance(bestPoint, finalGoal);
+
+        // Loop over all possible points in the square
+        //   and check their distance
+        for (int dy = 0; dy <= 1; dy++) {
+            for (int dx = 0; dx <= 1; dx++) {
+                // Calculate the taxicab distance for the point
+                Point p = square.offset(dx, dy);
+                int dist = taxicabDistance(p, finalGoal);
+
+                // If it is better, update the best point
+                if (dist < bestDist) {
+                    bestPoint = p;
+                    bestDist = dist;
+                }
+            }
+        }
+
+        // If the Tile is already at the best spot and it is
+        //   not at its final spot, move the square right 1
+        if (bestPoint.equals(curPos) && bestDist != 0) {
+            // Move the square
+            square = square.offset(1, 0);
+
+            // Recalculate the bestPoint and bestDist
+            bestPoint = square;
+            bestDist = taxicabDistance(bestPoint, finalGoal);
+
+            for (int dy = 0; dy <= 1; dy++) {
+                for (int dx = 0; dx <= 1; dx++) {
+                    // Calculate the taxicab distance for the point
+                    Point p = square.offset(dx, dy);
+                    int dist = taxicabDistance(p, finalGoal);
+    
+                    // If it is better, update the best point
+                    if (dist < bestDist) {
+                        bestPoint = p;
+                        bestDist = dist;
+                    }
+                }
+            }
+        }
+
+        // Move the empty Tile to the 2x2
+        // If the current Tile is in the top left corner
+        //   move the empty Tile to the top right corner.
+        // Otherwise move it to the top left corner
+        if (curPos.equals(square)) {
+            moveEmptyToPosition(square.offset(1, 0));
+        }
+        else {
+            moveEmptyToPosition(square);
+        }
+
+        // Move 1 to the best square in the 2x2
+        rotate2x2(square, curPos.subtract(square), bestPoint.subtract(square));
+
+        // Return if the Tile is finally in the right place
+        return bestPoint.equals(finalGoal);
+    }
+
+    // Move the 4 or 8 Tile towards its proper position
+    // Returns true if the Tile is at its final destination
+    //   and false otherwise
+    private boolean move48TowardsDestination(int num) {
+        // Check if num is a valid num
+        int validNums[] = {4, 8};
+        boolean isValid = false;
+        for (int i : validNums) {
+            if (num == i) {
+                isValid = true;
+                break;
+            }
+        }
+
+        // If isValid is still false, it is invalid
+        // Raise an exception
+        if (!isValid) {
+            throw new IllegalArgumentException("Tile value must be either 4 or 8.");
+        }
+
+        // Get the Tile and its current position
+        Tile cur = board.getTile(num);
+        Point curPos = new Point(GridPane.getColumnIndex(cur), GridPane.getRowIndex(cur));
+
+        // Get the final goal position
+        Point finalGoal = switch (num) {
+            case 4 -> new Point(3, 0);
+            case 8 -> new Point(3, 1);
+            default -> new Point(-1, -1);
+        };
+
+        // If the Tile is already at its final position,
+        //   return without doing anything
+        if (finalGoal.equals(curPos)) {
+            return true;
+        }
+
+        // Find the 2x2 with cur in it
+        Point square = find2x2Pos(cur);
+
+        // Get the stage 1 goal position of the Tile
+        // The state 1 goal is 2 spots below the statge 2/final goal position
+        Point stage1Goal = switch (num) {
+            case 4 -> new Point(3, 2);
+            case 8 -> new Point(3, 3);
+            default -> new Point(-1, -1);
+        };
+
+        // If the Tile is already at its stage 1 position,
+        //   move it into its final position
+        if (stage1Goal.equals(curPos)) {
+            // Move the empty Tile to the final goal position of the Tile
+            moveEmptyToPosition(curPos.offset(0, -2));
+
+            // Calcualte the corner of the 2x2 (and later the 3x2)
+            Point corner = curPos.offset(-1, -2);
+
+            // Rotate the 2x2 with the empty Tile
+            //   until the Tile to the right of it ((0, 0) locally)
+            //   is at the opposite corner ((1, 1) locally)
+            rotate2x2(corner, new Point(0, 0), new Point(1, 1));
+            
+            // Find the final goal position of the n-1 Tile
+            Point finalPrevGoal = switch(num) {
+                case 4 -> new Point(2, 0);
+                case 8 -> new Point(2, 1);
+                default -> new Point(-1, -1);
+            };
+
+            // Move the 3x2 until the n-1 Tile is in its final position
+            rotate3x2(corner, curPos.offset(0, -1).subtract(corner), finalPrevGoal.subtract(corner));
+
+            // Return a guaranteed success
+            return true;
+        }
+        // Otherwise move it towards that position
+        else {
+            // Find the best point for the 2x2
+            // Start at the upper left corner of the square
+            Point bestPoint = square;
+            int bestDist = taxicabDistance(bestPoint, stage1Goal);
+
+            // Loop over all possible points in the square
+            //   and check their distance
+            for (int dy = 0; dy <= 1; dy++) {
+                for (int dx = 0; dx <= 1; dx++) {
+                    // Calculate the taxicab distance for the point
+                    Point p = square.offset(dx, dy);
+                    int dist = taxicabDistance(p, stage1Goal);
+
+                    // If it is better, update the best point
+                    if (dist < bestDist) {
+                        bestPoint = p;
+                        bestDist = dist;
+                    }
+                }
+            }
+
+            // If the Tile is already at the best spot and it is
+            //   not at its final spot, move the square right 1
+            if (bestPoint.equals(curPos) && bestDist != 0) {
+                // Move the square
+                square = square.offset(1, 0);
+
+                // Recalculate the bestPoint and bestDist
+                bestPoint = square;
+                bestDist = taxicabDistance(bestPoint, stage1Goal);
+
+                for (int dy = 0; dy <= 1; dy++) {
+                    for (int dx = 0; dx <= 1; dx++) {
+                        // Calculate the taxicab distance for the point
+                        Point p = square.offset(dx, dy);
+                        int dist = taxicabDistance(p, stage1Goal);
+        
+                        // If it is better, update the best point
+                        if (dist < bestDist) {
+                            bestPoint = p;
+                            bestDist = dist;
+                        }
+                    }
+                }
+            }
+
+            // Move the empty Tile to the 2x2
+            // If the current Tile is in the top left corner
+            //   move the empty Tile to the top right corner.
+            // Otherwise move it to the top left corner
+            if (curPos.equals(square)) {
+                moveEmptyToPosition(square.offset(1, 0));
+            }
+            else {
+                moveEmptyToPosition(square);
+            }
+
+            // Move 1 to the best square in the 2x2
+            rotate2x2(square, curPos.subtract(square), bestPoint.subtract(square));
+
+            return bestPoint.equals(finalGoal);
+        }
+    }
+
+    // Move the 10 Tile towards its proper position
+    // Returns true if the Tile is at its final position
+    //   and false otherwise
+    private boolean move10TowardsDestination() {
+        // Get the Tile and its current position
+        Tile cur = board.getTile(10);
+        Point curPos = new Point(GridPane.getColumnIndex(cur), GridPane.getRowIndex(cur));
+
+        // Find the 2x2 with cur in it
+        Point square = find2x2Pos(cur);
+
+        // Get the goal position for the Tile
+        Point finalGoal = new Point(1, 2);
+
+        // If the Tile is already at the final position,
+        //   exit without doing anything
+        if (finalGoal.equals(curPos)) {
+            return true;
+        }
+
+        // If 10 is in a non-trapped spot move normally
+        if (!(curPos.equals(0, 3) || curPos.equals(1, 3))) {
+            // Find the best point for the 2x2
+            // Start at the upper left corner of the square
+            Point bestPoint = square;
+            int bestDist = taxicabDistance(bestPoint, finalGoal);
+
+            // Loop over all possible points in the square
+            //   and check their distance
+            for (int dy = 0; dy <= 1; dy++) {
+                for (int dx = 0; dx <= 1; dx++) {
+                    // Calculate the taxicab distance for the point
+                    Point p = square.offset(dx, dy);
+                    int dist = taxicabDistance(p, finalGoal);
+
+                    // If it is better, update the best point
+                    if (dist < bestDist) {
+                        bestPoint = p;
+                        bestDist = dist;
+                    }
+                }
+            }
+
+            // If the Tile is already at the best spot and it is
+            //   not at its final spot, move the square right 1
+            if (bestPoint.equals(curPos) && bestDist != 0) {
+                // Move the square
+                square = square.offset(1, 0);
+
+                // Recalculate the bestPoint and bestDist
+                bestPoint = square;
+                bestDist = taxicabDistance(bestPoint, finalGoal);
+
+                for (int dy = 0; dy <= 1; dy++) {
+                    for (int dx = 0; dx <= 1; dx++) {
+                        // Calculate the taxicab distance for the point
+                        Point p = square.offset(dx, dy);
+                        int dist = taxicabDistance(p, finalGoal);
+        
+                        // If it is better, update the best point
+                        if (dist < bestDist) {
+                            bestPoint = p;
+                            bestDist = dist;
+                        }
+                    }
+                }
+            }
+
+            // Move the empty Tile to the 2x2
+            // If the current Tile is in the top left corner
+            //   move the empty Tile to the top right corner.
+            // Otherwise move it to the top left corner
+            if (curPos.equals(square)) {
+                moveEmptyToPosition(square.offset(1, 0));
+            }
+            else {
+                moveEmptyToPosition(square);
+            }
+
+            // Move 1 to the best square in the 2x2
+            rotate2x2(square, curPos.subtract(square), bestPoint.subtract(square));
+
+            return bestPoint.equals(finalGoal);
+        }
+        // If no path exists, do a special thing
+        else {
+            // Rotate the 2x3 with 9 until 9 is at the bottom center of the 2x3
+            // If this branch is reached it is guaranteed that the empty Tile will
+            // be in the 2x3
+            rotate2x3(0, 2, 0, 0, 1, 1);
+
+            // Move the empty Tile to just above the 9 Tile
+            // This is really janky, but the maxSortedValue is
+            //   temporarily decremented to allow the empty Tile
+            //   to move freely
+            maxSortedValue--;
+            moveEmptyToPosition(1, 2);
+            maxSortedValue++;
+
+            // Spin 9 into place
+            rotate2x2(0, 2, 1, 1, 0, 0);
+
+            // Move the empty Tile to the 2x2 with 10
+            moveEmptyToPosition(1, 3);
+
+            // Spin 10 into place
+            rotate2x2(1, 2, GridPane.getColumnIndex(cur)-1, GridPane.getRowIndex(cur)-2, 0, 0);
+        }
+
+        return false;
+    }
+
+    // Move the 11 Tile towards its proper position
+    private boolean move11TowardsDestination() {
+        // Get the Tile and its current position
+        Tile cur = board.getTile(11);
+        Point curPos = new Point(GridPane.getColumnIndex(cur), GridPane.getRowIndex(cur));
+
+        // Find the 2x2 with cur in it
+        Point square = find2x2Pos(cur);
+
+        // Get the goal position for the Tile
+        Point finalGoal = new Point(2, 2);
+
+        // If the Tile is already at the final position,
+        //   exit without doing anything
+        if (finalGoal.equals(curPos)) {
+            return true;
+        }
+
+        // Check if 11 can be solved with a 2x3
+        // emptyPos handles a rare edge case where the emtpy Tile is directly
+        //   above the 11 Tile
+        // The edge case technically isn't required to be accounted for, but
+        //   I wanted to account for it
+        Point emptyPos = new Point(GridPane.getColumnIndex(empty), GridPane.getRowIndex(empty));
+        if (curPos.equals(2, 3) && !emptyPos.equals(2, 2)) {
+            // Move the empty Tile into the 2x3 with the 11
+            //   if necessary
+            moveEmptyToPosition(1, 3);
+
+            // Rotate the 2x3 with 10 until 10 is at the bottom center of the 2x3
+            // If this branch is reached it is guaranteed that the empty Tile will
+            //   be in the 2x3
+            rotate2x3(1, 2, 0, 0, 1, 1);
+
+            // Move the empty Tile to just above the 9 Tile
+            // This is really janky, but the maxSortedValue is
+            //   temporarily decremented to allow the empty Tile
+            //   to move freely
+            maxSortedValue--;
+            moveEmptyToPosition(2, 2);
+            maxSortedValue++;
+
+            // Spin 10 into place
+            rotate2x2(1, 2, 1, 1, 0, 0);
+
+            // Move the empty Tile to the 2x2 with 11
+            moveEmptyToPosition(2, 3);
+
+            // Spin the 11 into place
+            //rotate2x2(2, 2, GridPane.getColumnIndex(cur)-2, GridPane.getRowIndex(cur)-2, 0, 0);
+
+            return finalGoal.equals(GridPane.getColumnIndex(cur), GridPane.getRowIndex(cur));
+        }
+        // Check if 11 can be solved by a 2x4
+        else if (curPos.equals(0, 3) || curPos.equals(1, 3)) {
+            // Rotate the bottom 2x4 until 9 and 10 are
+            //   in a different 2x2 from 11
+            rotate2x4(0, 2, 0, 0, 2, 0);
+
+            // Rotate the 2x2 with 11 until it is no longer
+            //   lined up with 9 and 10
+            rotate2x2(0, 2, 0, 0, 1, 1);
+
+            // Rotate the bottom 2x4 until 9 is back in its place
+            rotate2x4(0, 2, 2, 0, 0, 0);
+
+            // This will never fully solve the puzzle
+            return false;
+        }
+        // Otherwise solve it normally
+        else {
+            // Find the best point for the 2x2
+            // Start at the upper left corner of the square
+            Point bestPoint = square;
+            int bestDist = taxicabDistance(bestPoint, finalGoal);
+
+            // Loop over all possible points in the square
+            //   and check their distance
+            for (int dy = 0; dy <= 1; dy++) {
+                for (int dx = 0; dx <= 1; dx++) {
+                    // Calculate the taxicab distance for the point
+                    Point p = square.offset(dx, dy);
+                    int dist = taxicabDistance(p, finalGoal);
+
+                    // If it is better, update the best point
+                    if (dist < bestDist) {
+                        bestPoint = p;
+                        bestDist = dist;
+                    }
+                }
+            }
+
+            // If the Tile is already at the best spot and it is
+            //   not at its final spot, move the square right 1
+            if (bestPoint.equals(curPos) && bestDist != 0) {
+                // Move the square
+                square = square.offset(1, 0);
+
+                // Recalculate the bestPoint and bestDist
+                bestPoint = square;
+                bestDist = taxicabDistance(bestPoint, finalGoal);
+
+                for (int dy = 0; dy <= 1; dy++) {
+                    for (int dx = 0; dx <= 1; dx++) {
+                        // Calculate the taxicab distance for the point
+                        Point p = square.offset(dx, dy);
+                        int dist = taxicabDistance(p, finalGoal);
+        
+                        // If it is better, update the best point
+                        if (dist < bestDist) {
+                            bestPoint = p;
+                            bestDist = dist;
+                        }
+                    }
+                }
+            }
+
+            // Move the empty Tile to the 2x2
+            // If the current Tile is in the top left corner
+            //   move the empty Tile to the top right corner.
+            // Otherwise move it to the top left corner
+            if (curPos.equals(square)) {
+                moveEmptyToPosition(square.offset(1, 0));
+            }
+            else {
+                moveEmptyToPosition(square);
+            }
+
+            // Move 1 to the best square in the 2x2
+            rotate2x2(square, curPos.subtract(square), bestPoint.subtract(square));
+
+            return bestPoint.equals(finalGoal);
+        }
+    }
+
+    // Move the 12 Tile towards its proper position
+    private boolean move12TowardsDestination() {
+        // Get the Tile and its current position
+        Tile cur = board.getTile(12);
+        Point curPos = new Point(GridPane.getColumnIndex(cur), GridPane.getRowIndex(cur));
+
+        // Get the goal position for the Tile
+        Point finalGoal = new Point(3, 2);
+
+        // If the Tile is already at the final position,
+        //   exit without doing anything
+        if (finalGoal.equals(curPos)) {
+            return true;
+        }
+
+        // If 12 is directly below 9, spin stuff so that
+        //   it isn't anymore
+        if (curPos.equals(0, 3)) {
+            // Spin the bottom 2x4 until 9,10,11 are not in the
+            //   same 2x2 as 12
+            rotate2x4(0, 2, 0, 0, 2, 0);
+
+            // Rotate the 2x2 with 12 so that it is not next to
+            //   9 in the cycle
+            rotate2x2(0, 2, 0, 0, 1, 1);
+
+            // Rotate the 2x4 until 9,10,11 are back in place
+            rotate2x4(0, 2, 2, 0, 0, 0);
+        }
+        // Otherwise just spin 12 into place
+        else {
+            // Rotate the bottom 2x4 until 9,10,11 are all
+            //   in a different 2x2 from 12 and 11 is at the
+            //   edge of the 2x2
+            rotate2x4(0, 2, 0, 0, 3, 0);
+
+            // Move the empty Tile into the 2x2 with the 12
+            moveEmptyToPosition(1, 2);
+
+            // Rotate the 2x2 with 12 until it lines up with 11
+            Point tilePos = new Point(GridPane.getColumnIndex(cur), GridPane.getRowIndex(cur));
+            rotate2x2(new Point(0, 2), tilePos.subtract(0, 2), new Point(1, 1));
+
+            // Rotate the 2x4 until 9 is back in its place
+            rotate2x4(0, 2, 3, 0, 0, 0);
+        }
+
+        return false;
+    }
+
+    // Move 13, 14, 15 towards their proper positions
+    private boolean moveFinal3TowardsDestination() {
+        // Get the 15 Tile
+        Tile cur = board.getTile(15);
+
+        // Rotate the bottom half until 9-12 are in
+        //   a single 2x2
+        rotate2x4(0, 2, 0, 0, 2, 0);
+
+        // Spin the 2x2 with 13-15 until 15 touches
+        //   the 12
+        Point tilePos = new Point(GridPane.getColumnIndex(cur), GridPane.getRowIndex(cur));
+        rotate2x2(new Point(0, 2), tilePos.subtract(0, 2), new Point(1, 1));
+
+        // Rotate the 2x4 until 15 is in its spot
+        rotate2x4(0, 2, 1, 1, 2, 1);
+
+        return true;
+    }
+
     public static void solve(Board board) {
         Solver s = new Solver(board);
-        //s.rotate2x2(2, 2, 0, 0, 1, 1);
-        //s.rotate3x2(2, 1, 0, 0, 1, 2);
-        //s.rotate2x4(0, 2, 0, 0, 3, 1);
-        //s.rotate2x3(1, 2, 0, 0, 2, 1);
-        /* for (Tile t : s.tiles) {
-            Point p = s.find2x2Pos(t);
-            if (p != null) {
-                System.out.printf("%d: (%d, %d)\n", t.value(), p.x(), p.y());
-            }
-        } */
-        //s.moveEmptyToPosition(3, 1);
-        /* for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                System.out.printf("%d, %d\n", i, j);
-                s.moveEmptyToPosition(i, j);
-            }
-        } */
+
+        // Solve 1-3
+        for (int i = 1; i <= 3; i++) {
+            while (!s.moveUpperLeftTowardsDestination(i));
+            s.maxSortedValue++;
+        }
+
+        // Solve 4
+        while (!s.move48TowardsDestination(4));
+        s.maxSortedValue++;
+
+        // Solve 5-7
+        for (int i = 5; i <= 7; i++) {
+            while (!s.moveUpperLeftTowardsDestination(i));
+            s.maxSortedValue++;
+        }
+
+        // Solve 8
+        while (!s.move48TowardsDestination(8));
+        s.maxSortedValue++;
+
+        // Solve 9
+        while (!s.moveUpperLeftTowardsDestination(9));
+        s.maxSortedValue++;
+
+        // Solve 10
+        while (!s.move10TowardsDestination());
+        s.maxSortedValue++;
+
+        // Solve 11
+        while (!s.move11TowardsDestination());
+        s.maxSortedValue++;
+        
+        // Solve 12
+        while (!s.move12TowardsDestination());
+        s.maxSortedValue++;
+        
+        // Solve 13,14,15
+        s.moveFinal3TowardsDestination();
+
+        // Hacky way to get the win screen to show up
+        // Just click a button that can't be moved
+        board.getTile(1).fire();
     }
 
     public static void main(String[] args) {
@@ -676,6 +1277,19 @@ record Point(int x, int y) {
 
     public boolean equals(Point p) {
         return p.x() == x && p.y() == y;
+    }
+
+    public boolean equals(int x, int y) {
+        return this.x == x && this.y == y;
+    }
+
+    // Subtract one point from another
+    public Point subtract(Point p) {
+        return new Point(x() - p.x(), y() - p.y());
+    }
+
+    public Point subtract(int px, int py) {
+        return new Point(x() - px, y() - py);
     }
 }
 
